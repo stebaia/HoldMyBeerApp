@@ -29,5 +29,5 @@ object ServiceLocator {
             .build()
     }
 
-    val apiService: BeerApiService = getRetrofit().create(BeerApiService::class.java)
+
 }
