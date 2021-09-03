@@ -1,4 +1,4 @@
-package com.sbaiardi.holdmybeer
+package com.sbaiardi.holdmybeer.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -6,13 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import com.sbaiardi.holdmybeer.R
 import com.sbaiardi.holdmybeer.data.ServiceLocator
 import com.sbaiardi.holdmybeer.data.api.BeerApiService
 import com.sbaiardi.holdmybeer.data.repositories.BeerRepository
-import com.sbaiardi.holdmybeer.model.Beer
 import com.sbaiardi.holdmybeer.viewmodels.BeerViewModel
 import com.sbaiardi.holdmybeer.viewmodels.factory.BeerModelFactory
 import kotlinx.android.synthetic.main.fragment_first.*
@@ -21,6 +19,9 @@ import kotlinx.android.synthetic.main.fragment_first.*
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
+
+    private val page=1
+    private val per_page=20
 
     private lateinit var beerViewModel: BeerViewModel
 
@@ -43,7 +44,7 @@ class FirstFragment : Fragment() {
                     Log.d("Loggin_beer",it.toString())
                 }
             })
-           beerViewModel.getPagedBeers()
+           beerViewModel.getPagedBeers(page, per_page)
        }
     }
 }

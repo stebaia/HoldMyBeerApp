@@ -14,9 +14,9 @@ class BeerViewModel(private val beerRepository: BeerRepository): ViewModel() {
     private val _beers = MutableLiveData<List<Beer>>()
     val beers: LiveData<List<Beer>> = _beers
 
-    fun getPagedBeers() {
+    fun getPagedBeers(page: Int, per_page: Int) {
         CoroutineScope(Main).launch(Dispatchers.IO) {
-            val response = beerRepository.getPagedBeers("beers?page=2&per_page=80")
+            val response = beerRepository.getPagedBeers(page, per_page)
             if (response.isSuccessful){
                 print(response.body())
                 _beers.postValue(response.body())
