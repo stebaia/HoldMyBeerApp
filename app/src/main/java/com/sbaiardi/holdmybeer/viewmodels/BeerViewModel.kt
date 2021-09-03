@@ -11,8 +11,9 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 
 class BeerViewModel(private val beerRepository: BeerRepository): ViewModel() {
-    private val _beers = MutableLiveData<List<Beer>>()
-    val beers: LiveData<List<Beer>> = _beers
+    private val _beers = MutableLiveData<MutableList<Beer>>()
+    private var temp_beer: MutableList<Beer>? = null
+    val beers: LiveData<MutableList<Beer>> = _beers
 
     fun getPagedBeers(page: Int, per_page: Int) {
         CoroutineScope(Main).launch(Dispatchers.IO) {

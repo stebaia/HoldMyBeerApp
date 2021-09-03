@@ -9,5 +9,5 @@ import retrofit2.http.Url
 
 interface BeerApiService {
     @GET("beers")
-    suspend fun getPagedBeers(@Query("page") page: Int, @Query("per_page") per_page: Int): Response<List<Beer>>
+    suspend fun getPagedBeers(@Query("page") page: Int, @Query("per_page") per_page: Int): Response<MutableList<Beer>>
 }
