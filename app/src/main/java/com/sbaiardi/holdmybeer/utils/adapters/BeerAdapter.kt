@@ -27,7 +27,7 @@ class BeerAdapter(private val onClick: (Beer) -> Unit): ListAdapter<Beer, BeerAd
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_municipality_list_layout,parent,false)
+                .inflate(R.layout.item_beers_recyclerview_layout,parent,false)
         return ViewHolder(view,onClick)
     }
 
