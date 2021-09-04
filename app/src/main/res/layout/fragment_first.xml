@@ -6,32 +6,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.FirstFragment">
-    <TextView
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="12dp"
-        android:id="@+id/title"
-        android:textSize="24dp"
-        android:textColor="@color/spanish_orange"
-        android:textFontWeight="900"
-        android:text="@string/app_name"
-        android:fontFamily="@font/poppins_medium"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TextView>
+        android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lilita_one"
+            android:text="@string/app_name"
+            android:textColor="@color/spanish_orange"
+            android:textSize="28dp"></TextView>
+        <ImageView
+            android:rotation="-35"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/title"
+            android:src="@drawable/toast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ImageView>
     <LinearLayout
+        android:weightSum="7"
         android:id="@+id/layout_search"
         android:layout_below="@id/title"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.google.android.material.card.MaterialCardView
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="12dp"
             app:cardElevation="12dp"
             android:layout_margin="24dp"
-
-            android:layout_width="250dp"
+            android:layout_weight="6"
+            android:layout_width="0dp"
             android:layout_height="50dp">
             <com.google.android.material.textfield.TextInputEditText
+
                 android:textSize="14dp"
                 android:textColorHint="@color/black"
                 android:fontFamily="@font/poppins_medium"
@@ -42,15 +60,16 @@
                 android:layout_height="match_parent"></com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.card.MaterialCardView>
         <com.google.android.material.card.MaterialCardView
+            android:layout_weight="1"
             app:cardElevation="6dp"
             android:layout_marginRight="12dp"
             app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/spanish_orange"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content">
             <RelativeLayout
-
+                android:layout_gravity="center"
                 android:layout_width="40dp"
                 android:layout_height="40dp">
                 <ImageView
@@ -65,11 +84,32 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="70dp"
         android:layout_below="@id/layout_search"
         android:background="@color/white"
         android:id="@+id/recyler_view_beer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <fragment
+            android:id="@+id/container"
+            android:name="com.sbaiardi.holdmybeer.ui.SecondFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:behavior_peekHeight="120dp"
+            app:behavior_skipCollapsed="true"
+            app:layout_behavior=".utils.listeners.GestureLockedBottomSheetBehavior"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
     <Button
         android:visibility="gone"

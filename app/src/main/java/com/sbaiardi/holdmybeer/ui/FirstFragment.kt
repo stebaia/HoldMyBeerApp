@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sbaiardi.holdmybeer.R
 import com.sbaiardi.holdmybeer.data.ServiceLocator
 import com.sbaiardi.holdmybeer.data.api.BeerApiService
@@ -24,10 +25,10 @@ import kotlinx.android.synthetic.main.fragment_first.*
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
-
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private val initial_page=1
     private val per_page=20
-
+    private lateinit var listener: BottomSheetCallback
     private lateinit var beerViewModel: BeerViewModel
 
     override fun onCreateView(
@@ -74,7 +75,6 @@ class FirstFragment : Fragment() {
             it.let {
                 Log.d("Loggin_beer", it.toString())
                 mutableListBeer.addAll(it)
-                val beerList = mutableListBeer
                 beerListAdapter.submitList(mutableListBeer)
                 beerListAdapter.notifyDataSetChanged()
             }
@@ -82,8 +82,45 @@ class FirstFragment : Fragment() {
         beerViewModel.getPagedBeers(initial_page, per_page)
     }
 
-    private fun adapterOnClick(beer: Beer) {
+    private fun configureBackdrop(beer: Beer){
+        val fragmentContainer = childFragmentManager.findFragmentById(R.id.container)
+        fragmentContainer?.view?.let {
+            BottomSheetBehavior.from(it).let { bs ->
+                bs.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
 
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        listener.onStateChanged(bottomSheet, newState, beer)
+                    }
+                })
 
+                bs.state = BottomSheetBehavior.STATE_COLLAPSED
+                bottomSheetBehavior = bs
+            }
+        }
     }
+
+    fun setOnBottomSheetCallback(onBottomSheetCallbacks: BottomSheetCallback) {
+        this.listener = onBottomSheetCallbacks
+    }
+
+    fun closeBottomSheet() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    fun openBottomSheet() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+
+    private fun adapterOnClick(beer: Beer) {
+        configureBackdrop(beer)
+        openBottomSheet()
+    }
+}
+
+
+
+interface BottomSheetCallback {
+    fun onStateChanged(bottomSheet: View, newState: Int, beer: Beer)
 }
