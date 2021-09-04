@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 
 class BeerViewModel(private val beerRepository: BeerRepository): ViewModel() {
     private val _beers = MutableLiveData<MutableList<Beer>>()
-    private var temp_beer: MutableList<Beer>? = null
     val beers: LiveData<MutableList<Beer>> = _beers
 
     fun getPagedBeers(page: Int, per_page: Int) {
@@ -26,4 +25,20 @@ class BeerViewModel(private val beerRepository: BeerRepository): ViewModel() {
             }
         }
     }
+
+
+    fun getSearchBeersByName(name: String,page: Int, per_page: Int) {
+        val replacedName = name.replace(" ", "_")
+        CoroutineScope(Main).launch(Dispatchers.IO) {
+
+            val response = if(name.length > 2) beerRepository.getSearchBeersByName(replacedName,page, per_page) else beerRepository.getPagedBeers(page, per_page)
+            if (response.isSuccessful){
+                print(response.body())
+                _beers.postValue(response.body())
+            }else{
+                print(response.errorBody())
+            }
+        }
+    }
+
 }
