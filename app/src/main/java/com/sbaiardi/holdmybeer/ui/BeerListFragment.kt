@@ -55,13 +55,13 @@ class FirstFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        val mutableListBeer: MutableList<Beer> = ArrayList()
         val beerListAdapter = BeerAdapter{ beer -> adapterOnClick(beer) }
         val layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
-
         val scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                 beerViewModel.getSearchBeersByName(nameSearched, page + 1, per_page)
@@ -75,7 +75,6 @@ class FirstFragment : Fragment() {
             val filterBeerDialog = FilterBeerDialog()
             filterBeerDialog.show(fm, "fragment_edit_name")
         }
-        var mutableListBeer: MutableList<Beer> = ArrayList()
 
         iet_search_beer.addTextChangedListener(object : TextWatcher {
 
@@ -101,7 +100,7 @@ class FirstFragment : Fragment() {
                     )
                 } else if (s.isEmpty()) {
                     nameSearched = ""
-                    beerViewModel.getSearchBeersByName("", initial_page, per_page)
+                    beerViewModel.getSearchBeersByName(nameSearched, initial_page, per_page)
                 }
             }
         })
@@ -110,6 +109,7 @@ class FirstFragment : Fragment() {
                 if (flagNameChanged) {
                     scrollListener.resetState()
                     recyler_view_beer.scrollToPosition(0)
+                    //Verificare se togliendolo rompo l'infinite scrolling
                     mutableListBeer.clear()
                     beerListAdapter.submitList(mutableListBeer)
                     beerListAdapter.notifyDataSetChanged()

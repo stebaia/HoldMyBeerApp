@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.sbaiardi.holdmybeer.ui.SecondFragment"
+        android:name="com.sbaiardi.holdmybeer.ui.DetailBeerFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 

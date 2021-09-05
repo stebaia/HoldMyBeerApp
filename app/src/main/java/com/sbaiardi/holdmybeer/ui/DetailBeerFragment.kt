@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.detail_beer_bottomsheet_layout.*
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : BottomSheetDialogFragment(), BottomSheetCallback {
+class DetailBeerFragment : BottomSheetDialogFragment(), BottomSheetCallback {
     private var currentState: Int = BottomSheetBehavior.STATE_EXPANDED
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
