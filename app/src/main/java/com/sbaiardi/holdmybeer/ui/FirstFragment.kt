@@ -3,15 +3,9 @@ package com.sbaiardi.holdmybeer.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import android.widget.TextView.OnEditorActionListener
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,15 +16,13 @@ import com.sbaiardi.holdmybeer.data.ServiceLocator
 import com.sbaiardi.holdmybeer.data.api.BeerApiService
 import com.sbaiardi.holdmybeer.data.repositories.BeerRepository
 import com.sbaiardi.holdmybeer.model.Beer
+import com.sbaiardi.holdmybeer.ui.dialogs.FilterBeerDialog
 import com.sbaiardi.holdmybeer.utils.adapters.BeerAdapter
 import com.sbaiardi.holdmybeer.utils.listeners.EndlessRecyclerViewScrollListener
 import com.sbaiardi.holdmybeer.viewmodels.BeerViewModel
 import com.sbaiardi.holdmybeer.viewmodels.factory.BeerModelFactory
 import kotlinx.android.synthetic.main.fragment_first.*
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class FirstFragment : Fragment() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private val initial_page=1
@@ -41,17 +33,17 @@ class FirstFragment : Fragment() {
     private var flag = false
     private var nameSearched: String = ""
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         beerViewModel = ViewModelProvider(
-                this, BeerModelFactory(
+            this, BeerModelFactory(
                 BeerRepository(
-                        ServiceLocator.getRetrofit().create(
-                                BeerApiService::class.java
-                        )
+                    ServiceLocator.getRetrofit().create(
+                        BeerApiService::class.java
+                    )
                 )
-        )
+            )
         ).get(BeerViewModel::class.java)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_first, container, false)
@@ -65,9 +57,9 @@ class FirstFragment : Fragment() {
         super.onStart()
         val beerListAdapter = BeerAdapter{ beer -> adapterOnClick(beer) }
         val layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
 
         val scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
@@ -78,31 +70,49 @@ class FirstFragment : Fragment() {
         recyler_view_beer.addOnScrollListener(scrollListener)
         recyler_view_beer.adapter = beerListAdapter
         recyler_view_beer.layoutManager = layoutManager
+        relative_filter.setOnClickListener {
+            val fm = childFragmentManager
+            val filterBeerDialog = FilterBeerDialog()
+            filterBeerDialog.show(fm, "fragment_edit_name")
+        }
         var mutableListBeer: MutableList<Beer> = ArrayList()
 
         iet_search_beer.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {}
 
-            override fun beforeTextChanged(s: CharSequence, start: Int,
-                                           count: Int, after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
             }
 
-            override fun onTextChanged(s: CharSequence, start: Int,
-                                       before: Int, count: Int) {
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
                 flagNameChanged = true
-                if (s.length > 2){
+                if (s.length > 2) {
                     nameSearched = iet_search_beer.text.toString()
-                    beerViewModel.getSearchBeersByName(iet_search_beer.text.toString(),initial_page, per_page)
-                }else if (s.isEmpty()){
-                    beerViewModel.getSearchBeersByName("",initial_page, per_page)
+                    beerViewModel.getSearchBeersByName(
+                        iet_search_beer.text.toString(),
+                        initial_page,
+                        per_page
+                    )
+                } else if (s.isEmpty()) {
+                    nameSearched = ""
+                    beerViewModel.getSearchBeersByName("", initial_page, per_page)
                 }
             }
         })
         beerViewModel.beers.observe(viewLifecycleOwner, {
             it.let {
-                if (flagNameChanged){
+                if (flagNameChanged) {
+                    scrollListener.resetState()
+                    recyler_view_beer.scrollToPosition(0)
                     mutableListBeer.clear()
+                    beerListAdapter.submitList(mutableListBeer)
+                    beerListAdapter.notifyDataSetChanged()
                     flagNameChanged = false
                 }
                 mutableListBeer.addAll(it)
@@ -110,7 +120,7 @@ class FirstFragment : Fragment() {
                 beerListAdapter.notifyDataSetChanged()
             }
         })
-        beerViewModel.getSearchBeersByName("",initial_page, per_page)
+        beerViewModel.getSearchBeersByName("", initial_page, per_page)
     }
 
     private fun configureBackdrop(beer: Beer){
@@ -149,8 +159,6 @@ class FirstFragment : Fragment() {
         openBottomSheet()
     }
 }
-
-
 
 interface BottomSheetCallback {
     fun onStateChanged(bottomSheet: View, newState: Int, beer: Beer)
