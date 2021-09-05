@@ -1,4 +1,4 @@
-package com.sbaiardi.holdmybeer.ui
+package com.sbaiardi.holdmybeer.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -23,14 +23,14 @@ class DetailBeerFragment : BottomSheetDialogFragment(), BottomSheetCallback {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        (parentFragment as FirstFragment).setOnBottomSheetCallback(this)
+        (parentFragment as BeerListFragment).setOnBottomSheetCallback(this)
         return inflater.inflate(R.layout.detail_beer_bottomsheet_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         img_arrow_down.setOnClickListener {
-            (parentFragment as FirstFragment).closeBottomSheet()
+            (parentFragment as BeerListFragment).closeBottomSheet()
         }
     }
 

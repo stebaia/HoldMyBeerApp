@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content">
                 <Button
                     android:layout_alignParentEnd="true"
-                    android:id="@+id/btn_annulla"
+                    android:id="@+id/btn_filter"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-medium"
                     android:textStyle="normal"
@@ -53,7 +53,7 @@
                     android:letterSpacing="0.09"
                     android:lineSpacingExtra="5sp"
                     android:textAllCaps="true"
-                    android:text="Filtra!"
+                    android:text="@string/filter"
                     android:background="@drawable/rounded_background_button_orange"
                     android:layout_width="114dp"
                     android:layout_height="44dp" />

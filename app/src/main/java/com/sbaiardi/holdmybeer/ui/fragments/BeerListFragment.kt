@@ -1,15 +1,19 @@
-package com.sbaiardi.holdmybeer.ui
+package com.sbaiardi.holdmybeer.ui.fragments
 
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sbaiardi.holdmybeer.R
 import com.sbaiardi.holdmybeer.data.ServiceLocator
@@ -22,14 +26,17 @@ import com.sbaiardi.holdmybeer.utils.listeners.EndlessRecyclerViewScrollListener
 import com.sbaiardi.holdmybeer.viewmodels.BeerViewModel
 import com.sbaiardi.holdmybeer.viewmodels.factory.BeerModelFactory
 import kotlinx.android.synthetic.main.fragment_first.*
+import kotlin.math.log
 
-class FirstFragment : Fragment() {
+class BeerListFragment : Fragment() {
+    private val DIALOG_REQUEST_CODE = "DIALOG_FILTER"
+    private var dateFilterArrayList = arrayListOf<String>()
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private val initial_page=1
     private val per_page=20
     private lateinit var listener: BottomSheetCallback
     private lateinit var beerViewModel: BeerViewModel
-    private var flagNameChanged = false
+    private var filtered = false
     private var flag = false
     private var nameSearched: String = ""
     override fun onCreateView(
@@ -70,10 +77,16 @@ class FirstFragment : Fragment() {
         recyler_view_beer.addOnScrollListener(scrollListener)
         recyler_view_beer.adapter = beerListAdapter
         recyler_view_beer.layoutManager = layoutManager
-        relative_filter.setOnClickListener {
+        material_filter.setOnClickListener {
             val fm = childFragmentManager
             val filterBeerDialog = FilterBeerDialog()
-            filterBeerDialog.show(fm, "fragment_edit_name")
+            filterBeerDialog.show(fm, "dialog_filter_beer")
+        }
+
+        setFragmentResultListener(DIALOG_REQUEST_CODE) { _, result ->
+            result.getStringArray("date_array")?.let { date_array ->
+                Log.d("array_datestring", date_array[0])
+            }
         }
 
         iet_search_beer.addTextChangedListener(object : TextWatcher {
@@ -90,7 +103,7 @@ class FirstFragment : Fragment() {
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                flagNameChanged = true
+                filtered = true
                 if (s.length > 2) {
                     nameSearched = iet_search_beer.text.toString()
                     beerViewModel.getSearchBeersByName(
@@ -104,16 +117,35 @@ class FirstFragment : Fragment() {
                 }
             }
         })
+        beerViewModel.filteredList.observe(viewLifecycleOwner, {
+            it.let {
+                material_clear.visibility = View.VISIBLE
+                Log.d("FilteredList", it.toString())
+                scrollListener.resetState()
+                recyler_view_beer.scrollToPosition(0)
+                mutableListBeer.clear()
+                mutableListBeer.addAll(it)
+                beerListAdapter.submitList(mutableListBeer)
+                beerListAdapter.notifyDataSetChanged()
+            }
+        })
+
+        material_clear.setOnClickListener {
+            filtered = true
+            material_clear.visibility = View.GONE
+            beerViewModel.getSearchBeersByName("", initial_page, per_page)
+        }
+
         beerViewModel.beers.observe(viewLifecycleOwner, {
             it.let {
-                if (flagNameChanged) {
+                if (filtered) {
                     scrollListener.resetState()
                     recyler_view_beer.scrollToPosition(0)
                     //Verificare se togliendolo rompo l'infinite scrolling
                     mutableListBeer.clear()
                     beerListAdapter.submitList(mutableListBeer)
                     beerListAdapter.notifyDataSetChanged()
-                    flagNameChanged = false
+                    filtered = false
                 }
                 mutableListBeer.addAll(it)
                 beerListAdapter.submitList(mutableListBeer)

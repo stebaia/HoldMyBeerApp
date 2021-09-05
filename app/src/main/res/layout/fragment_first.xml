@@ -34,12 +34,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></ImageView>
     <LinearLayout
-        android:weightSum="7"
+        android:weightSum="8"
         android:id="@+id/layout_search"
         android:layout_below="@id/title"
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.card.MaterialCardView
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="12dp"
@@ -64,6 +65,7 @@
                 android:layout_height="match_parent"></com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.card.MaterialCardView>
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/material_filter"
             android:layout_weight="1"
             app:cardElevation="6dp"
             android:layout_marginRight="12dp"
@@ -73,7 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content">
             <RelativeLayout
-                android:id="@+id/relative_filter"
+
                 android:layout_gravity="center"
                 android:layout_width="40dp"
                 android:layout_height="40dp">
@@ -81,6 +83,29 @@
 
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_round_filter_alt_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></ImageView>
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:visibility="gone"
+            android:id="@+id/material_clear"
+            android:layout_weight="1"
+            app:cardElevation="6dp"
+            android:layout_marginRight="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/ruby_red"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+                <ImageView
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_baseline_clear_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></ImageView>
             </RelativeLayout>
@@ -105,7 +130,7 @@
         android:layout_height="match_parent">
         <fragment
             android:id="@+id/container"
-            android:name="com.sbaiardi.holdmybeer.ui.DetailBeerFragment"
+            android:name="com.sbaiardi.holdmybeer.ui.fragments.DetailBeerFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
