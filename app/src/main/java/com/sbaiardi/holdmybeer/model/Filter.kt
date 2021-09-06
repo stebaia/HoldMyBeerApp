@@ -1,15 +1,18 @@
 package com.sbaiardi.holdmybeer.model
 
+import java.lang.NumberFormatException
+
 data class Filter(val startDate: String, val endDate: String){
 
     companion object {
-        fun buildDate(month: String, year: String): String {
-            if (month != "00" && year != "0000") {
-                if (year.length >= 4 && month.length >= 2) {
+        fun buildDate(month: Int, year: Int): String {
+            if (month in 1..12 && year in 1800..2021) {
+                    if (month in 1..9) {
+                        return "0${month}-${year}"
+                    }
                     return "${month}-${year}"
-               }
             }
-            return "Error"
+            throw NumberFormatException("no valid date found, check filter")
         }
     }
 

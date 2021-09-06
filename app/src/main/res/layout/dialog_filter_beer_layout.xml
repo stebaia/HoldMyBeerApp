@@ -51,6 +51,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:textColorHint="@color/gray"
                         android:maxLength="2"
                         android:lines="1"
                         android:inputType="number"
@@ -67,6 +68,7 @@
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
                     android:maxLength="4"
+                    android:textColorHint="@color/gray"
                     android:lines="1"
                     android:inputType="number"
                     app:cardBackgroundColor="@color/white"
@@ -77,6 +79,7 @@
                     android:layout_height="50dp">
                     <com.google.android.material.textfield.TextInputEditText
                         android:maxLength="4"
+                        android:textColorHint="@color/gray"
                         android:lines="1"
                         android:inputType="number"
                         android:textAlignment="center"
@@ -113,6 +116,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:textColorHint="@color/gray"
                         android:maxLength="2"
                         android:lines="1"
                         android:inputType="number"
@@ -135,6 +139,7 @@
                     android:layout_width="100dp"
                     android:layout_height="50dp">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:textColorHint="@color/gray"
                         android:maxLength="4"
                         android:lines="1"
                         android:inputType="number"
