@@ -1,11 +1,13 @@
 package com.sbaiardi.holdmybeer.ui.dialogs
 
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -20,6 +22,7 @@ import com.sbaiardi.holdmybeer.model.Filter
 import com.sbaiardi.holdmybeer.viewmodels.BeerViewModel
 import com.sbaiardi.holdmybeer.viewmodels.factory.BeerModelFactory
 import kotlinx.android.synthetic.main.dialog_filter_beer_layout.*
+import java.util.*
 
 class FilterBeerDialog: DialogFragment()  {
     private val DIALOG_REQUEST_CODE = "DIALOG_FILTER"
@@ -40,16 +43,22 @@ class FilterBeerDialog: DialogFragment()  {
     override fun onStart() {
         super.onStart()
         dialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val width = ViewGroup.LayoutParams.MATCH_PARENT
-        val height = ViewGroup.LayoutParams.WRAP_CONTENT
         btn_filter.setOnClickListener {
-            val beerViewModel: BeerViewModel by viewModels({requireParentFragment()})
-            val filter: Filter = Filter("11-2012", "11-2020")
-            beerViewModel.getFilteredByYears(filter.startDate, filter.endDate, 1, 20)
+            val beerViewModel: BeerViewModel by viewModels({ requireParentFragment() })
+            val startDate = Filter.buildDate(iet_start_month.text.toString(), iet_start_year.text.toString())
+            val endDate = Filter.buildDate(iet_end_month.text.toString(), iet_end_year.text.toString())
+            if (startDate == "Error" || endDate == "Error") {
+                Toast.makeText(requireContext(),"Error building date, check your filter", Toast.LENGTH_LONG).show()
+            }else {
+                val filter = Filter(startDate, endDate)
+                beerViewModel.getFilteredByYears(filter.startDate, filter.endDate, 1, 20)
+                dismiss()
+            }
 
-           dismiss()
         }
     }
+
+
 
 
 

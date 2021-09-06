@@ -37,7 +37,6 @@ class BeerListFragment : Fragment() {
     private lateinit var listener: BottomSheetCallback
     private lateinit var beerViewModel: BeerViewModel
     private var filtered = false
-    private var flag = false
     private var nameSearched: String = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,12 +51,7 @@ class BeerListFragment : Fragment() {
                 )
             )
         ).get(BeerViewModel::class.java)
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_first, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {
@@ -81,12 +75,6 @@ class BeerListFragment : Fragment() {
             val fm = childFragmentManager
             val filterBeerDialog = FilterBeerDialog()
             filterBeerDialog.show(fm, "dialog_filter_beer")
-        }
-
-        setFragmentResultListener(DIALOG_REQUEST_CODE) { _, result ->
-            result.getStringArray("date_array")?.let { date_array ->
-                Log.d("array_datestring", date_array[0])
-            }
         }
 
         iet_search_beer.addTextChangedListener(object : TextWatcher {

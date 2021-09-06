@@ -8,7 +8,4 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ViewModelTest {
 
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
 }
